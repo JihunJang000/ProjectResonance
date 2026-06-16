@@ -15,62 +15,58 @@ public class PlayerController : MonoBehaviour
     private Vector2 _moveInput;
     private Rigidbody2D _rb;
     
-    public StateMachine StateMachine { get; private set; }
-    
-    public IdleState IdleState { get; private set; }
-    public MoveState MoveState { get; private set; }
-    public DashState DashState { get; private set; }
-    
-    //プロパティー
-    public Rigidbody2D Rb => _rb; // get専用
-    public Vector2 MoveInput => _moveInput;
-    public float MoveSpeed => _moveSpeed;
-    public float DashSpeed => _dashSpeed;
-    public float DashDuration => _dashDuration;
+    private bool _isDashing;
+    private float _dashTimer;
+    private Vector2 _dashDirection;
 
     private void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
         
-        // InputActionからInput情報を得る為に宣言
+        // 인풋 액션 객체 생성 및 이벤트 구독 (콜백 방식)
         _inputActions = new PlayerInputActions();
         
         _inputActions.Player.Move.performed += context => _moveInput = context.ReadValue<Vector2>();
         _inputActions.Player.Move.canceled += context => _moveInput = Vector2.zero;
         
         _inputActions.Player.Dash.started += context => Dash();
-
-        StateMachine = new StateMachine();
-        
-        // State再利用用
-        IdleState = new IdleState(this, StateMachine);
-        MoveState = new MoveState(this, StateMachine);
-        DashState = new DashState(this, StateMachine);
     }
 
-    private void Start()
-    {
-        StateMachine.Initialize(this.IdleState); 
-    }
-    
     private void OnEnable() => _inputActions.Enable();
     private void OnDisable() => _inputActions.Disable();
 
     private void FixedUpdate()
     {
-        StateMachine.FixedUpdate();
-    }
+        if (_isDashing)
+        {
+            _dashTimer -= Time.fixedDeltaTime; 
 
-    void Update()
-    {
-        StateMachine.Update();
+            //タイマーが残った場合
+            if (_dashTimer > 0f)
+            {
+                _rb.linearVelocity = _dashDirection * _dashSpeed;　
+            }
+            // 残ってない場合
+            else
+            {
+                _isDashing = false;
+                _rb.linearVelocity = Vector2.zero;
+            }
+            
+            return; 
+        }
+        
+        _rb.linearVelocity = _moveInput * _moveSpeed;
     }
 
     private void Dash()
     {
-        //　動かない場合と既にダッシュしている場合 Return.
-        if (this._moveInput == Vector2.zero || StateMachine.CurrentState == DashState) return;
+        if (_isDashing || _moveInput == Vector2.zero) return;
+
+        Debug.Log("[PlayerController.Dash] Dash");
         
-        StateMachine.ChangeState(DashState);
+        _isDashing = true;                      // ダッシュ状態ON
+        _dashTimer = _dashDuration;             // タイマー初期化
+        _dashDirection = _moveInput.normalized; // 方向固定
     }
 }
