@@ -1,0 +1,46 @@
+# --- [ Unity essential exception ] ---
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+
+# MemoryCaptures/Recordings
+[Mm]emoryCaptures/
+[Rr]ecordings/
+
+# Addressable/AssetBundle Build Result 
+[Aa]ssets/[Aa]ddressable[Aa]assets[Dd]ata/*/*.bin*
+[Aa]ssets/[Ss]treamingAssets/aa.meta
+[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# --- [ JetBrains Rider / .idea ] ---
+.idea/
+# Rider Assets
+[Aa]ssets/Plugins/Editor/JetBrains*
+
+# --- [ Visual Studio / MS ] ---
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.opendb
+*.VC.db
+*.vsconfig
+
+# --- [ OS and etc] ---
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+
+# Assets/_Project/Imports/
