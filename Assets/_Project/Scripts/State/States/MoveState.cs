@@ -13,7 +13,7 @@ public class MoveState : IState
     
     public void Enter()
     {
-        Debug.Log("[MoveState] Enter");
+        // Debug.Log("[MoveState] Enter");
     }
 
     public void FixedUpdate()
@@ -31,6 +31,6 @@ public class MoveState : IState
 
     public void Exit()
     {
-        Debug.Log("[MoveState] Exit");
+        // Debug.Log("[MoveState] Exit");
     }
 }
