@@ -15,13 +15,12 @@ public class PlayerController : MonoBehaviour
     private Vector2 _moveInput;
     private Rigidbody2D _rb;
     
+    //プロパティー
     public StateMachine StateMachine { get; private set; }
     
     public IdleState IdleState { get; private set; }
     public MoveState MoveState { get; private set; }
     public DashState DashState { get; private set; }
-    
-    //プロパティー
     public Rigidbody2D Rb => _rb; // get専用
     public Vector2 MoveInput => _moveInput;
     public float MoveSpeed => _moveSpeed;

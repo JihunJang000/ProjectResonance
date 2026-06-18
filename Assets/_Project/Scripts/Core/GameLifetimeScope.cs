@@ -1,16 +1,19 @@
 using System.Collections.Generic;
+using Unity.Cinemachine;
 using VContainer;
 using VContainer.Unity;
 using UnityEngine;
+
 /// <summary>
 /// VContainerにClass登録
+/// 後でRootLifetimeScope, InGameScope, UIScopeに分離する予定。
 /// </summary>
 public class GameLifetimeScope : LifetimeScope
 {
     // CharacterManagerが純粋C#Classの為、GameLifetimeScopeで宣言。
-    [Header("キャラクター設定")]
+    //　後でSOに変更する予定。
     [SerializeField] private List<PlayerController> _characterPrefabs; 
-    
+    [SerializeField] private CinemachineCamera _virtualCamera;
     protected override void Configure(IContainerBuilder builder)
     {
         // Lifetime.Singleton -> CharacterManagerをSingleのように使える。
@@ -19,8 +22,11 @@ public class GameLifetimeScope : LifetimeScope
         // AsSelf() -> 名前CharacterManagerでVContainerに登録
         builder.Register<CharacterManager>(Lifetime.Singleton)
             .WithParameter(_characterPrefabs)
+            .WithParameter(_virtualCamera)
             .AsImplementedInterfaces()
             .AsSelf();
+
+        builder.Register<InputManager>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
         
         Debug.Log("[GameLifetimeScope] マネージャー登録");
     }
