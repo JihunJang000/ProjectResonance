@@ -14,7 +14,7 @@ public class IdleState : IState
     public void Enter()
     {
         _player.Rb.linearVelocity = Vector2.zero;
-        Debug.Log("[IdleState] Enter");
+        // Debug.Log("[IdleState] Enter");
     }
 
     public void Update()
@@ -30,6 +30,6 @@ public class IdleState : IState
 
     public void Exit()
     {
-        Debug.Log("[IdleState] Exit");
+        // Debug.Log("[IdleState] Exit");
     }
 }

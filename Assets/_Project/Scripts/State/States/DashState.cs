@@ -16,7 +16,7 @@ public class DashState : IState
 
     public void Enter()
     {
-        Debug.Log("[DashState] Enter");
+        // Debug.Log("[DashState] Enter");
         // 状態進入する時初期化
         _dashTimer = _player.DashDuration;             
         _dashDirection = _player.MoveInput.normalized; 
@@ -44,7 +44,7 @@ public class DashState : IState
 
     public void Exit()
     {
-        Debug.Log("[DashState] Exit");
+        // Debug.Log("[DashState] Exit");
         _player.Rb.linearVelocity = Vector2.zero;
     }
 }
