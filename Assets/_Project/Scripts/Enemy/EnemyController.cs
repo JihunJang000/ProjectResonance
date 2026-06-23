@@ -8,18 +8,20 @@ using VContainer;
 /// AI演算(UniTask)と 物理移動(FixedUpdate)を分離した最適化された敵コントローラー
 /// </summary>
 [RequireComponent(typeof(Rigidbody2D))] // RigidBody2D自動追加
-public class EnemyController : MonoBehaviour
+public class EnemyController : MonoBehaviour, IDamageable
 {
     //後で基本Statsは敵別分離する予定。
     [SerializeField] private float _hp = 30f;
     [SerializeField] private float _moveSpeed = 3f;
     [SerializeField] private float _attackRange = 1.5f;
     [SerializeField] private float _attackDamage = 10f;
+    [SerializeField] private float _attackCooldown = 1.0f;
     [SerializeField] private float _thinkInterval = 0.2f; // AIが思考する間隔
 
     private Rigidbody2D _rb;
     private CharacterManager _characterManager;
     private Transform _target;
+    private float _lastAttackTime = 0f;
     
     // 計算済みの移動方向を保存しておく変数
     private Vector2 _cachedMoveDirection = Vector2.zero; 
@@ -74,7 +76,7 @@ public class EnemyController : MonoBehaviour
     
     private void Die()
     {
-        Debug.Log("[Enemy] 몬스터 사망!");
+        Debug.Log("[Enemy] Enemy Died");
         Destroy(gameObject); // Todo: 後でObjectPoolに変更。
     }
     
@@ -102,7 +104,19 @@ public class EnemyController : MonoBehaviour
                     {
                         // 攻撃範囲内にいる時わ停止
                         _cachedMoveDirection = Vector2.zero;
-                        // 後で攻撃ロジック追加
+                        
+                        // Colltimeチェック
+                        if (Time.time >= _lastAttackTime + _attackCooldown)
+                        {
+                            // プレイヤーにダメージ
+                            if (_target.TryGetComponent(out IDamageable playerDamageable))
+                            {
+                                playerDamageable.TakeDamage(_attackDamage);
+                                Debug.Log($"[EnemyController] プレイヤーを攻撃 ダメージ: {_attackDamage}");
+                                _lastAttackTime = Time.time; 
+                            }
+                        }
+                        
                     }
                 }
 
@@ -112,7 +126,7 @@ public class EnemyController : MonoBehaviour
         }
         catch (OperationCanceledException)
         {
-            Debug.LogWarning("[EnemyConroller] ThinkLoopAsync cancelled");
+            Debug.LogWarning("[EnemyController] ThinkLoopAsync cancelled");
         }
     }
 

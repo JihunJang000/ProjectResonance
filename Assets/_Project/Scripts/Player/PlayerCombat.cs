@@ -15,9 +15,11 @@ public class PlayerCombat : MonoBehaviour, IDamageable
     [SerializeField] private float _maxHp = 100f;
     private float _currentHp;
 
-    [Header("Equipped Weapon")]
-    [SerializeField] private WeaponBase _equippedWeapon;
-    // 後でSkill, Ult追加予定。
+    [Header("Default Weapon Prefab")]
+    [SerializeField] private WeaponBase _startingWeaponPrefab; //武器原本データ
+    private WeaponBase _equippedWeapon; // 実際装備した武器。
+    
+    // Todo: 後でSkill, Ult追加予定。
 
     private RoundManager _roundManager;
     private CancellationTokenSource _combatCts;
@@ -33,6 +35,15 @@ public class PlayerCombat : MonoBehaviour, IDamageable
         _currentHp = _maxHp;
     }
 
+    private void Start()
+    {
+        // 基本武器装着
+        if (_startingWeaponPrefab != null)
+        {
+            EquipWeapon(_startingWeaponPrefab);
+        }
+    }
+    
     private void OnEnable()
     {
         _combatCts = new CancellationTokenSource();
@@ -61,7 +72,7 @@ public class PlayerCombat : MonoBehaviour, IDamageable
                 {
                     // 抽象クラスWeaponBaseのAttack関数
                     _equippedWeapon.Attack();
-                    
+
                     // 攻撃周期分だけ待機。
                     await UniTask.Delay(TimeSpan.FromSeconds(_equippedWeapon.AttackInterval), cancellationToken: token);
                 }
@@ -72,9 +83,32 @@ public class PlayerCombat : MonoBehaviour, IDamageable
                 }
             }
         }
-        catch (OperationCanceledException) { }
+        catch (OperationCanceledException)
+        {
+            
+        }
     }
 
+    //武器装着、交代。（Playerと武器の位置同期化。）
+    public void EquipWeapon(WeaponBase weaponPrefab)
+    {
+        //既存武器破壊。
+        if (_equippedWeapon != null)
+        {
+            Destroy(_equippedWeapon.gameObject);
+        }
+
+        // 武器をPlayerの子に。
+        WeaponBase newWeapon = Instantiate(weaponPrefab, transform);
+        
+        // 位置一致させる。
+        newWeapon.transform.localPosition = Vector3.zero;
+        
+        _equippedWeapon = newWeapon;
+        
+        Debug.Log($"[PlayerCombat] {_equippedWeapon.name} Weapon Equipped");
+    }
+    
     /// <summary>
     /// ひげきされた場合
     /// </summary>

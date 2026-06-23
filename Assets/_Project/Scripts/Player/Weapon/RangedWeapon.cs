@@ -14,14 +14,26 @@ public class RangedWeapon : WeaponBase //Base抽象クラス1個+Interface達継
     
     private PlayerController _playerController; //キャラ方向を得る為に。(今は使わない） 
     
+    
+    
     // GCを残さないように、あらかじめ配列宣言。NonAlloc方式で敵を探知。
     // 最大100。GC管理用。Profiling. 
     private readonly Collider2D[] _hitColliders = new Collider2D[100]; 
+    private ContactFilter2D _contactFilter;
+    
+    private void Awake()
+    {
+        _contactFilter = new ContactFilter2D();
+        _contactFilter.useLayerMask = true;
+        _contactFilter.SetLayerMask(_enemyLayer);
+        _contactFilter.useTriggers = true; 
+    }
+    
     public override void Attack()
     {
-        // NonAlloc -> 関数が新しい配列を返却せず、あらかじめ宣言した配列にいれる。探知された敵の数だけ返却。
-        // _hitColliders.Length使用禁止(NonAllocの特性がある為hitCount使用）
-        int hitCount = Physics2D.OverlapCircleNonAlloc(transform.position, _targetRange, _hitColliders, _enemyLayer);
+        // OverlapCircle -> 関数が新しい配列を返却せず、あらかじめ宣言した配列にいれる。探知された敵の数だけ返却。
+        // _hitColliders.Length使用禁止(OverlapCircleの特性がある為hitCount使用）
+        int hitCount = Physics2D.OverlapCircle(transform.position, _targetRange, _contactFilter, _hitColliders);
 
         // 敵ない時攻撃いない。
         if (hitCount == 0) return;

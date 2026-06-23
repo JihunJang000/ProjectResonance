@@ -11,11 +11,26 @@ public class MeleeWeapon : WeaponBase
 
     private readonly Collider2D[] _hitColliders = new Collider2D[100];
     
+    private ContactFilter2D _contactFilter;
+    
+    private void Awake()
+    {
+        //　敵のColliderのisTriggerがOnされても攻撃するように設定。
+        _contactFilter = new ContactFilter2D();
+        _contactFilter.useLayerMask = true;
+        _contactFilter.SetLayerMask(_enemyLayer);
+        _contactFilter.useTriggers = true;
+    }
+    
     public override void Attack()
     {
-        // OverlapCircleNonAlloc -> 新しい配列を生成せず、_hitCollidersに結果を上書きする
-        int hitCount = Physics2D.OverlapCircleNonAlloc(transform.position, _attackRadius, _hitColliders, _enemyLayer);
-
+        
+        Debug.Log("[Weapon] Attack() 実行");
+        
+        // OverlapCircle -> 新しい配列を生成せず、_hitCollidersに結果を上書きする
+        int hitCount = Physics2D.OverlapCircle(transform.position, _attackRadius, _contactFilter, _hitColliders);
+        
+        Debug.Log($"hitCount: {hitCount}");
         // 探知された敵がない場合は終了
         if (hitCount == 0) return;
 
@@ -25,6 +40,11 @@ public class MeleeWeapon : WeaponBase
             if (_hitColliders[i].TryGetComponent(out IDamageable damageable))
             {
                 damageable.TakeDamage(Damage); // 継承したWeaponBaseのIDamageable
+                Debug.Log($"Damage: {Damage}");
+            }
+            else
+            {
+                Debug.Log("IDamageable is null");
             }
         }
         
