@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float _moveSpeed = 5f;
+    [SerializeField] private float _moveSpeed = 5f; 
     [SerializeField] private float _dashSpeed = 15f;
     [SerializeField] private float _dashDuration = 0.3f;
     

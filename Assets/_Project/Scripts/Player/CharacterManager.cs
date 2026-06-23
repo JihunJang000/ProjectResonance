@@ -22,6 +22,16 @@ public class CharacterManager : IInitializable, IDisposable
     private CinemachineCamera _virtualCamera;
     private int _currentIndex = 0;
     
+    //　プロパティー
+    public Transform CurrentPlayerTransform //現在プレイヤの位置
+    {
+        get 
+        {
+            if (_spawnedCharacters == null || _spawnedCharacters.Count == 0) return null;
+            return _spawnedCharacters[_currentIndex].transform;
+        }
+    }
+    
     // GameLifetimeScopeのWithParameterから自動的に注入
     public CharacterManager(List<PlayerController> prefabs, IObjectResolver resolver, InputManager inputManager, CinemachineCamera virtualCamera)
     {

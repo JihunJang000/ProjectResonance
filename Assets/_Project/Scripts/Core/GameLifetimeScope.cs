@@ -14,6 +14,9 @@ public class GameLifetimeScope : LifetimeScope
     //　後でSOに変更する予定。
     [SerializeField] private List<PlayerController> _characterPrefabs; 
     [SerializeField] private CinemachineCamera _virtualCamera;
+    
+    [SerializeField] private StageSpawnDataSO _stageSpawnDataSO; //後でStage複数使う為にListに変更
+    
     protected override void Configure(IContainerBuilder builder)
     {
         // Lifetime.Singleton -> CharacterManagerをSingleのように使える。
@@ -26,6 +29,13 @@ public class GameLifetimeScope : LifetimeScope
             .AsImplementedInterfaces()
             .AsSelf();
 
+        builder.Register<EnemySpawnManager>(Lifetime.Singleton)
+            .WithParameter(_stageSpawnDataSO)
+            .AsImplementedInterfaces()
+            .AsSelf();
+        
+        builder.Register<RoundManager>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+        
         builder.Register<InputManager>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
         
         Debug.Log("[GameLifetimeScope] マネージャー登録");
