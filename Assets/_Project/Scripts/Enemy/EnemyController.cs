@@ -11,6 +11,7 @@ using VContainer;
 public class EnemyController : MonoBehaviour
 {
     //後で基本Statsは敵別分離する予定。
+    [SerializeField] private float _hp = 30f;
     [SerializeField] private float _moveSpeed = 3f;
     [SerializeField] private float _attackRange = 1.5f;
     [SerializeField] private float _attackDamage = 10f;
@@ -43,6 +44,14 @@ public class EnemyController : MonoBehaviour
         ThinkLoopAsync(_cts.Token).Forget();
     }
 
+    
+    // FixedUpdateでわ重い計算わしないように構成
+    private void FixedUpdate()
+    {
+        // 軽い計算のみ
+        _rb.linearVelocity = _cachedMoveDirection * _moveSpeed;
+    }
+    
     private void OnDisable()
     {
         // 敵が死んだり非活性化されたらループを止める
@@ -53,6 +62,22 @@ public class EnemyController : MonoBehaviour
         _rb.linearVelocity = Vector2.zero;
     }
 
+    public void TakeDamage(float damage)
+    {
+        _hp -= damage;
+
+        if (_hp <= 0)
+        {
+            Die();
+        }
+    }
+    
+    private void Die()
+    {
+        Debug.Log("[Enemy] 몬스터 사망!");
+        Destroy(gameObject); // Todo: 後でObjectPoolに変更。
+    }
+    
     /// <summary>
     /// 0.2秒ごとに1回だけターゲットの方向と距離を計算する非同期関数
     /// </summary>
@@ -91,12 +116,5 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// FixedUpdateでわ重い計算わしないように構成
-    /// </summary>
-    private void FixedUpdate()
-    {
-        // 軽い計算のみ
-        _rb.linearVelocity = _cachedMoveDirection * _moveSpeed;
-    }
+    
 }

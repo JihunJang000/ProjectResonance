@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 /// <summary>
+/// Player移動担当
 ///  playerの動きを new InputSystemを使って表現
 /// </summary>
 [RequireComponent(typeof(Rigidbody2D))]
