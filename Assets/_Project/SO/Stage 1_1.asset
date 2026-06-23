@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4329e67da31911a4396545ae1e8e5265, type: 3}
+  m_Name: Stage 1_1
+  m_EditorClassIdentifier: Assembly-CSharp::StageSpawnDataSO
+  Round1Enemies:
+  - EnemyPrefab: {fileID: 926358149391420757, guid: dca5e698c123b0941a9fd4819c091b3e, type: 3}
+    SpawnWeight: 6
+    EnemyColor: {r: 0, g: 1, b: 0.34449625, a: 0}
+    StatMultiplier: 1
+  - EnemyPrefab: {fileID: 926358149391420757, guid: 4dca44d8dc33c2e47b339eea3759be02, type: 3}
+    SpawnWeight: 3
+    EnemyColor: {r: 0, g: 0.8576112, b: 1, a: 0}
+    StatMultiplier: 1
+  Round2Enemies:
+  - EnemyPrefab: {fileID: 926358149391420757, guid: dca5e698c123b0941a9fd4819c091b3e, type: 3}
+    SpawnWeight: 3
+    EnemyColor: {r: 0.21733709, g: 0.4188679, b: 0.21733709, a: 0}
+    StatMultiplier: 1
+  - EnemyPrefab: {fileID: 926358149391420757, guid: 4dca44d8dc33c2e47b339eea3759be02, type: 3}
+    SpawnWeight: 6
+    EnemyColor: {r: 0, g: 0.3622446, b: 1, a: 0}
+    StatMultiplier: 1
+  Round3Enemies:
+  - EnemyPrefab: {fileID: 926358149391420757, guid: dca5e698c123b0941a9fd4819c091b3e, type: 3}
+    SpawnWeight: 0
+    EnemyColor: {r: 0.88252807, g: 1, b: 0, a: 0}
+    StatMultiplier: 0
+  - EnemyPrefab: {fileID: 926358149391420757, guid: 4dca44d8dc33c2e47b339eea3759be02, type: 3}
+    SpawnWeight: 8
+    EnemyColor: {r: 0.36266708, g: 0, b: 1, a: 0}
+    StatMultiplier: 0
