@@ -9,6 +9,9 @@ public class MeleeWeapon : WeaponBase
     [SerializeField] private float _attackRadius = 2.5f; 
     [SerializeField] private LayerMask _enemyLayer;      // InspectorでEnemy Layer設定
 
+    [Header("Visual Effects")]
+    [SerializeField] private GameObject _attackVfxPrefab;
+    
     private readonly Collider2D[] _hitColliders = new Collider2D[100];
     
     private ContactFilter2D _contactFilter;
@@ -25,7 +28,17 @@ public class MeleeWeapon : WeaponBase
     public override void Attack()
     {
         
-        Debug.Log("[Weapon] Attack() 実行");
+        // Debug.Log("[Weapon] Attack() 実行");
+        
+        if (_attackVfxPrefab != null)
+        {
+            GameObject vfx = Instantiate(_attackVfxPrefab, transform.position, Quaternion.identity);
+            
+            vfx.transform.localScale = new Vector3(_attackRadius * 2, _attackRadius * 2, 1f);
+            
+            // スイングエフェクトなので短めに設定
+            Destroy(vfx, 0.25f); 
+        }
         
         // OverlapCircle -> 新しい配列を生成せず、_hitCollidersに結果を上書きする
         int hitCount = Physics2D.OverlapCircle(transform.position, _attackRadius, _contactFilter, _hitColliders);

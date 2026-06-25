@@ -11,11 +11,11 @@ using UnityEngine;
 public class GameLifetimeScope : LifetimeScope
 {
     // CharacterManagerが純粋C#Classの為、GameLifetimeScopeで宣言。
-    //　後でSOに変更する予定。
+    //　Todo: 後でSOに変更する予定。
     [SerializeField] private List<PlayerController> _characterPrefabs; 
     [SerializeField] private CinemachineCamera _virtualCamera;
     
-    [SerializeField] private StageSpawnDataSO _stageSpawnDataSO; //後でStage複数使う為にListに変更
+    [SerializeField] private StageSpawnDataSO _stageSpawnDataSO; // Todo: 後でStage複数使う為にListに変更
     
     protected override void Configure(IContainerBuilder builder)
     {

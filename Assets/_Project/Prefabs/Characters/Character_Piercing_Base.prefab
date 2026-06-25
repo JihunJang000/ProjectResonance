@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 6778450590592595396}
   - component: {fileID: 5903265858872493026}
   - component: {fileID: 2276371928811725193}
+  - component: {fileID: 4844526116333156401}
+  - component: {fileID: 6476453043874122230}
   m_Layer: 0
   m_Name: Character_Piercing_Base
   m_TagString: Untagged
@@ -136,6 +138,8 @@ MonoBehaviour:
   _moveSpeed: 5
   _dashSpeed: 15
   _dashDuration: 0.3
+  _mainSkill: {fileID: 4844526116333156401}
+  _ultimateSkill: {fileID: 6476453043874122230}
 --- !u!114 &2276371928811725193
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -150,3 +154,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCombat
   _maxHp: 100
   _startingWeaponPrefab: {fileID: 677651215952621970, guid: c8fa73bde3bc0cf48a3850fd421d4c64, type: 3}
+--- !u!114 &4844526116333156401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 421495450171234957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f93548a53a53bc4a915bacf6323f2f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SingleTargetSnipeSkill
+  _cooldown: 5
+  _arrowPrefab: {fileID: 8273802299067490057, guid: e77d6de2edefe664283da406aecf3546, type: 3}
+  _damage: 80
+  _searchRadius: 10
+--- !u!114 &6476453043874122230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 421495450171234957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d8bcad36ee1b7742b600c67a77706b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShotgunSpreadSkill
+  _cooldown: 5
+  _arrowPrefab: {fileID: 8273802299067490057, guid: e77d6de2edefe664283da406aecf3546, type: 3}
+  _damage: 20

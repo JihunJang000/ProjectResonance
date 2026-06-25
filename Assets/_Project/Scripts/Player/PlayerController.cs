@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using VContainer;
 
 /// <summary>
 /// Player移動担当
@@ -12,7 +13,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _dashSpeed = 15f;
     [SerializeField] private float _dashDuration = 0.3f;
     
+    [Header("Skills")]
+    [SerializeField] private CharacterSkillBase _mainSkill;     // Q Skill
+    [SerializeField] private CharacterSkillBase _ultimateSkill; // E Skill
+    
     private PlayerInputActions _inputActions;　//　自動的に作られたInputAction情報を持っているクラス 
+    private InputManager _inputManager;
     private Vector2 _moveInput;
     private Rigidbody2D _rb;
     
@@ -27,6 +33,14 @@ public class PlayerController : MonoBehaviour
     public float MoveSpeed => _moveSpeed;
     public float DashSpeed => _dashSpeed;
     public float DashDuration => _dashDuration;
+    
+    
+    [Inject]
+    public void Construct(InputManager inputManager)
+    {
+        _inputManager = inputManager;
+    }
+    
 
     private void Awake()
     {
@@ -52,9 +66,28 @@ public class PlayerController : MonoBehaviour
     {
         StateMachine.Initialize(this.IdleState); 
     }
-    
-    private void OnEnable() => _inputActions.Enable();
-    private void OnDisable() => _inputActions.Disable();
+
+    private void OnEnable()
+    {
+        _inputActions.Enable();
+        
+        if (_inputManager != null)
+        {
+            _inputManager.OnMainSkillPressed += ExecuteMainSkill;
+            _inputManager.OnUltimatePressed += ExecuteUltimateSkill;
+        }
+    }
+
+    private void OnDisable()
+    {
+        _inputActions.Disable();
+        
+        if (_inputManager != null)
+        {
+            _inputManager.OnMainSkillPressed -= ExecuteMainSkill;
+            _inputManager.OnUltimatePressed -= ExecuteUltimateSkill;
+        }
+    }
 
     private void FixedUpdate()
     {
@@ -72,5 +105,15 @@ public class PlayerController : MonoBehaviour
         if (this._moveInput == Vector2.zero || StateMachine.CurrentState == DashState) return;
         
         StateMachine.ChangeState(DashState);
+    }
+    
+    private void ExecuteMainSkill()
+    {
+        if (_mainSkill != null) _mainSkill.ExecuteSkill();
+    }
+
+    private void ExecuteUltimateSkill()
+    {
+        if (_ultimateSkill != null) _ultimateSkill.ExecuteSkill();
     }
 }

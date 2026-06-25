@@ -3,6 +3,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using VContainer;
+using R3;
 
 /// <summary>
 /// AI演算(UniTask)と 物理移動(FixedUpdate)を分離した最適化された敵コントローラー
@@ -10,7 +11,14 @@ using VContainer;
 [RequireComponent(typeof(Rigidbody2D))] // RigidBody2D自動追加
 public class EnemyController : MonoBehaviour, IDamageable
 {
-    //後で基本Statsは敵別分離する予定。
+    // Todo: 後で基本Statsは敵別分離する予定。
+    // Todo：後でEnemyController -> Model, Controllerで分離する予定。
+    
+    // Subject -> R3でのActionと類似なもの。
+    public Subject<(float damage, Vector3 position)> OnDamaged { get; } = new Subject<(float, Vector3)>();　//Damage関連
+    public Subject<float> OnHpRatioChanged { get; } = new Subject<float>(); //HP関連
+    
+    
     [SerializeField] private float _hp = 30f;
     [SerializeField] private float _moveSpeed = 3f;
     [SerializeField] private float _attackRange = 1.5f;
@@ -18,10 +26,13 @@ public class EnemyController : MonoBehaviour, IDamageable
     [SerializeField] private float _attackCooldown = 1.0f;
     [SerializeField] private float _thinkInterval = 0.2f; // AIが思考する間隔
 
+    private float _maxHp;
+    
     private Rigidbody2D _rb;
     private CharacterManager _characterManager;
     private Transform _target;
     private float _lastAttackTime = 0f;
+    
     
     // 計算済みの移動方向を保存しておく変数
     private Vector2 _cachedMoveDirection = Vector2.zero; 
@@ -37,6 +48,7 @@ public class EnemyController : MonoBehaviour, IDamageable
     private void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
+        _maxHp = _hp;
     }
 
     private void OnEnable()
@@ -64,10 +76,19 @@ public class EnemyController : MonoBehaviour, IDamageable
         _rb.linearVelocity = Vector2.zero;
     }
 
+    private void OnDestroy()
+    {
+        // R3メモリー解除
+        OnDamaged.Dispose();
+        OnHpRatioChanged.Dispose();
+    }
+    
     public void TakeDamage(float damage)
     {
         _hp -= damage;
-
+        // OnNext -> Invokeと似ている関数
+        OnDamaged.OnNext((damage, transform.position + Vector3.up * 0.5f));　// 
+        OnHpRatioChanged.OnNext(Mathf.Clamp01(_hp / _maxHp));
         if (_hp <= 0)
         {
             Die();
@@ -126,9 +147,7 @@ public class EnemyController : MonoBehaviour, IDamageable
         }
         catch (OperationCanceledException)
         {
-            Debug.LogWarning("[EnemyController] ThinkLoopAsync cancelled");
+            // Debug.LogWarning("[EnemyController] ThinkLoopAsync cancelled");
         }
     }
-
-    
 }
