@@ -9,6 +9,9 @@ public class InputManager : ITickable
 {
     public event Action<int> OnSwapCharacter;
 
+    public event Action OnMainSkillPressed;
+    public event Action OnUltimatePressed;
+    
     public void Tick()
     {
         if (Keyboard.current == null) return;
@@ -16,5 +19,7 @@ public class InputManager : ITickable
         if (Keyboard.current.digit1Key.wasPressedThisFrame) OnSwapCharacter?.Invoke(0);
         if (Keyboard.current.digit2Key.wasPressedThisFrame) OnSwapCharacter?.Invoke(1);
         
+        if (Keyboard.current.qKey.wasPressedThisFrame) OnMainSkillPressed?.Invoke();
+        if (Keyboard.current.eKey.wasPressedThisFrame) OnUltimatePressed?.Invoke();
     }
 }

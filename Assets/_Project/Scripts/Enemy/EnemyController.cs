@@ -147,7 +147,7 @@ public class EnemyController : MonoBehaviour, IDamageable
         }
         catch (OperationCanceledException)
         {
-            Debug.LogWarning("[EnemyController] ThinkLoopAsync cancelled");
+            // Debug.LogWarning("[EnemyController] ThinkLoopAsync cancelled");
         }
     }
 }

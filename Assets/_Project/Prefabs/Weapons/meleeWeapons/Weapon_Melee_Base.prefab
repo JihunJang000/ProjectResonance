@@ -50,3 +50,4 @@ MonoBehaviour:
   _enemyLayer:
     serializedVersion: 2
     m_Bits: 64
+  _attackVfxPrefab: {fileID: 629303487385533307, guid: 15a5c1da79abdab44a41c2c68f909a64, type: 3}
