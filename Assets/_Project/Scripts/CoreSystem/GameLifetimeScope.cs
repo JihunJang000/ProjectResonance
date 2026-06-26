@@ -37,6 +37,13 @@ public class GameLifetimeScope : LifetimeScope
         builder.Register<RoundManager>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
         
         builder.Register<InputManager>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+
+        // UI関連
+        builder.RegisterComponentInHierarchy<GameResultPresenter>();
+        builder.RegisterComponentInHierarchy<InGameHUDPresenter>();
+        
+        //Build完了前に強制注入
+        builder.RegisterBuildCallback(resolver => resolver.Resolve<GameResultPresenter>());
         
         Debug.Log("[GameLifetimeScope] マネージャー登録");
     }

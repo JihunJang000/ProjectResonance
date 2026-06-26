@@ -185,5 +185,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ExplosionSkill
   _cooldown: 5
   _damage: 50
-  _explosionRadius: 3
+  _explosionRadius: 4
   _vfxPrefab: {fileID: 629303487385533307, guid: 39ca16d67814c134fb580ecfbd4e2bfa, type: 3}
