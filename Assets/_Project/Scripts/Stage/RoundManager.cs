@@ -3,6 +3,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using R3;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using VContainer.Unity;
 
 // Round状態 Enum宣言
@@ -81,6 +82,7 @@ public class RoundManager : IInitializable, IDisposable
 
             // 生存 -> 勝利
             _currentState.Value = RoundState.Victory;
+            Time.timeScale = 0f;
             Debug.Log("[RoundManager] Stage Clear!");
         }
         catch (OperationCanceledException)
@@ -117,6 +119,14 @@ public class RoundManager : IInitializable, IDisposable
         if (_currentState.Value == RoundState.Victory || _currentState.Value == RoundState.GameOver) return;
         
         _currentState.Value = RoundState.GameOver;
+        Time.timeScale = 0f;
+        
         Debug.Log("[RoundManager] Game Over!");
+    }
+    
+    public void RestartGame()
+    {
+        Time.timeScale = 1f; // 時間を元に戻す
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // 現在のシーンを再読み込み
     }
 }
